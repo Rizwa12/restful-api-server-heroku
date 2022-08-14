@@ -9,33 +9,34 @@ function randomNumber()
 {
   return Math.floor(Math.random()*10000000);
 }
-app.post('/user',(req,res)=>{
+app.post("/user",(req,res)=>{
   console.log(req.body);
   let newUser = {
-    id : randomNumber(),
-    fullname: req.body.fullname,
-    username: req.body.username,
-    password: req.body.password
+  id : randomNumber(),
+  fullname: req.body.fullname,
+  username: req.body.username,
+  password: req.body.password
   }
   user.push(newUser);
-  res.send("user is created");
+  res.status(201).send("user is created");
 })
 
 //get single user
 app.get('/user/:userId',(req,res)=>{
   let userId = req.params.userId;
-  let isFound = false;
+  let isFound = false; //?? why
   for(let i =0;i<user.length;i++){
     if(user[i].id==userId)
     {
       res.send(user[i]);
-      isFound = true;
+      //isFound = true; //??
       break;
     }
   }
-  if(!isFound)
+  if(isFound===false)
+  //if(!isFound)
   {
-    res.send("user not found");
+    res.status(204).send("user not found");
   }
   
 })
@@ -43,6 +44,7 @@ app.get('/user/:userId',(req,res)=>{
 app.get('/users',(req,res)=>{
   res.send(user);
 })
+//request response body
 //to modify single user
 app.put('/user/:userId',(req,res)=>{
 
@@ -59,6 +61,7 @@ app.put('/user/:userId',(req,res)=>{
   }
   if(userIndex === -1)
   {
+    res.status(204)
     res.send("user not found");
   }
   else
